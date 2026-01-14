@@ -1,43 +1,47 @@
 // pages/api/demo/verify.js
 
-export default function handler(req, res) {
+export const config = {
+  api: { bodyParser: { sizeLimit: "6mb" } },
+};
+
+export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ ok: false, error: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  try {
-    const {
-      fullName = "Demo User",
-      country = "US",
-      documentType = "Passport",
-      documentNumber = "DEMO-123",
-    } = req.body || {};
+  // Simulate real processing latency (demo only)
+  await new Promise((r) => setTimeout(r, 1200));
 
-    // Simulación determinista simple (para que parezca "real" y repetible)
-    const seed = `${fullName}|${country}|${documentType}|${documentNumber}`;
-    let hash = 0;
-    for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  // Demo signals: name triggers different outcomes to prove end-to-end flow
+  const { fullName = "", documentType = "ID", country = "N/A" } = req.body || {};
+  const signal = String(fullName).toLowerCase();
 
-    const riskScore = hash % 100; // 0-99
-    const approved = riskScore < 70; // regla demo
-    const verificationId = `KYC-${Date.now()}-${String(hash).slice(0, 6)}`;
+  let status = "Approved";
+  let riskScore = Math.floor(Math.random() * 35) + 10; // 10–44
 
-    const result = {
-      ok: true,
-      verificationId,
-      status: approved ? "Approved" : "Rejected",
-      riskScore,
-      country,
-      documentType,
-      signals: approved
-        ? ["document_readable", "no_watchlist_match_demo"]
-        : ["risk_threshold_exceeded_demo"],
-      note: "Demo mode: simulated verification. Production uses provider integration (OCR/AML/sanctions).",
-      createdAt: new Date().toISOString(),
-    };
+  const flags = ["OCR simulated", "AML simulated", "Risk scoring simulated"];
 
-    return res.status(200).json(result);
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: "Demo verification failed" });
+  if (signal.includes("test") || signal.includes("demo")) {
+    riskScore = Math.floor(Math.random() * 25) + 55; // 55–79
+    status = "Review";
+    flags.push("Name pattern flagged (demo rule)");
   }
+
+  if (signal.includes("fraud") || signal.includes("sanction")) {
+    riskScore = Math.floor(Math.random() * 15) + 85; // 85–99
+    status = "Rejected";
+    flags.push("High-risk keyword flagged (demo rule)");
+  }
+
+  return res.status(200).json({
+    status,
+    riskScore,
+    country,
+    documentType,
+    flags,
+    referenceId: `KYC-DEMO-${Date.now()}`,
+    disclaimer:
+      "This is a simulated verification flow for demonstration only. No real KYC/AML checks are performed.",
+  });
 }
+
