@@ -71,23 +71,22 @@ export default function Demo() {
           <h2 style={{ margin: 0 }}>Demo</h2>
 
           <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a
-              href="https://demo.kycaas.app"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: "inline-block",
-                background: "#0B0F14",
-                color: "#fff",
-                padding: "10px 14px",
-                borderRadius: 12,
-                fontWeight: 700,
-                textDecoration: "none",
-                border: "1px solid rgba(148,163,184,.18)",
-              }}
-            >
-              Open KYCSaaS Demo (Sandbox)
-            </a>
+            <span
+  style={{
+    display: "inline-block",
+    background: "#0B0F14",
+    color: "#94a3b8",
+    padding: "10px 14px",
+    borderRadius: 12,
+    fontWeight: 700,
+    border: "1px dashed rgba(148,163,184,.35)",
+    cursor: "not-allowed",
+    opacity: 0.75,
+  }}
+>
+  Sandbox (Coming soon)
+</span>
+ 
 
             <a
               href="#verification"
