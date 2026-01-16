@@ -90,7 +90,8 @@ Email: olsencastillo92@gmail.com
 
 ⚠️ Disclaimer
 This asset is provided as‑is for acquisition purposes. Buyer is responsible for performing their own technical, legal, and compliance review before using in production.
-🔍 Demo Verification Flow
+🔍 Demo Verification Flow https://kycsaas-asset-sale.vercel.app/demo
+
 KYCSaaS includes a functional demo endpoint (`/api/demo/verify.js`) and UI integration (`/pages/demo.js`).
 Buyers can run simulated identity checks directly from the dashboard, with realistic latency, risk scoring,
 and compliance disclaimers. This showcases how the architecture supports provider‑agnostic integrations
